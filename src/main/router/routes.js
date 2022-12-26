@@ -1,8 +1,8 @@
 const { Router } = require('express');
 const express = require('express')
 const res = require('express/lib/response');
-const UserController = require('../infra/controllers/UserController');
-const AddressController = require('../infra/controllers/AddressController');
+const UserController = require('../../infra/controllers/UserController');
+const AddressController = require('../../infra/controllers/AddressController');
 
 
 
