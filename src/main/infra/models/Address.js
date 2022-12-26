@@ -1,24 +1,36 @@
 const { Model, DataTypes } = require('sequelize')
 
-class Address extends Model {
-  static init(sequelize) {
-    super.init({
-      zipcode: DataTypes.STRING,
-      street: DataTypes.STRING,
-      number: DataTypes.STRING,
+module.exports = (sequelize, DataTypes) => {
+  const Adreess = sequelize.define('Adress', {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
+    zipcode: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    street: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    number: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+
+  }, {});
 
 
-    }, {
-      sequelize
-    })
-  }
 
-  static associate(models) {
-    this.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
-  }
+
+
+  Address.associate = function (models) {
+    // associations can be defined here
+    Address.belongsTo(model.User, { foreignKey: 'user_id', as: 'user' });
+  };
+
+     return User
 
 }
-
-
-
-module.exports = Address;
