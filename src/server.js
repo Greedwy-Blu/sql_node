@@ -1,12 +1,19 @@
 const express = require('express');
-const  routes =   require('./main/router/routes');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-require('./main/infra/database/index');
+const cors = require('cors');
 const { ApolloServer, gql } = require('apollo-server-express');
 const http = require("http");
+const routes = require('./main/router/routes');
+const db = require('./main/infra/models/index')
+require('./main/infra/database/index');
+
+db.sequelize.authenticate().then(() =>{//Conexion a la BD
+    console.log("Estas conectado a la BD")
+});
+db.sequelize.sync()
+
 
 const app = express();
+app.use(cors());
 
 const typeDefs = `
     type Query{
@@ -18,15 +25,19 @@ const resolvers = {
         totalPosts: () => 100,
     },
 };
+
 let apolloServer = null;
+
 async function startServer() {
     apolloServer = new ApolloServer({
         typeDefs,
         resolvers,
+         context: { db },
     });
     await apolloServer.start();
     apolloServer.applyMiddleware({ app });
 }
+
 startServer();
 const httpserver = http.createServer(app);
 

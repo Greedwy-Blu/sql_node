@@ -6,11 +6,11 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true
       },
         name: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
       },
       email: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
       },
 
@@ -18,8 +18,8 @@ module.exports = (sequelize, DataTypes) => {
 
 User.associate = function(models) {
     // associations can be defined here
-    User.belongsTo(model.User, { foreignKey: 'user_id', as: 'user' });
+    User.hasMany(models.Address, { foreignKey: 'user_id', as: 'addresses' });
   };
 
-    return User
+  return User;
 }
