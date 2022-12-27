@@ -30,6 +30,7 @@ async function startServer() {
 startServer();
 const httpserver = http.createServer(app);
 
+app.use(routes);
 app.get("/rest", function (req, res) {
     res.json({ data: "api working" });
 });
