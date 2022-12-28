@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon src/server.js",
-    "prepare": "husky install",
+    "prepare": "cd .. && husky install front/.husky",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable"
   },

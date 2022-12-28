@@ -1,24 +1,21 @@
 const { Model, DataTypes } = require('sequelize')
 
 module.exports = (sequelize, DataTypes) => {
-  const Address = sequelize.define('Address', {
+  const Posts = sequelize.define('Posts', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true
     },
-    zipcode: {
+    content: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    street: {
+    title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    number: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+
 
   }, {});
 
@@ -26,11 +23,11 @@ module.exports = (sequelize, DataTypes) => {
 
 
 
-  Address.associate = function (models) {
+  Posts.associate = function (models) {
     // associations can be defined here
-    Address.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
+    Posts.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
   };
 
-     return Address
+     return Posts
 
 }
