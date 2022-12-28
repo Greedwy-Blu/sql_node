@@ -11,14 +11,18 @@
   },
   "lint-staged": {
     "*.js": [
-      "eslint --fix","git add"
+      "npm run lint",
+    "npm run format",
+      "git add"
     ]
   },
   "scripts": {
     "dev": "nodemon src/server.js",
     "prepare": "cd .. && husky install front/.husky",
     "prepack": "pinst --disable",
-    "postpack": "pinst --enable"
+    "postpack": "pinst --enable",
+      "lint": "eslint . --fix --max-warnings=0",
+        "format": "prettier . --write"
   },
   "dependencies": {
     "apollo-server-express": "^3.11.1",
@@ -26,6 +30,7 @@
     "body-parser": "^1.20.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "eslint-config-prettier": "^8.5.0",
     "express": "^4.18.2",
     "express-graphql": "^0.12.0",
     "fs": "^0.0.1-security",
@@ -37,6 +42,7 @@
     "path": "^0.12.7",
     "pg": "^8.8.0",
     "pg-hstore": "^2.3.4",
+    "prettier": "^2.8.1",
     "process": "^0.11.10",
     "sequelize": "^6.26.0"
   },
