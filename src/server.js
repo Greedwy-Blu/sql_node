@@ -4,7 +4,7 @@ const { ApolloServer } = require('apollo-server-express')
 const http = require('http')
 const routes = require('./main/router/routes')
 const db = require('./main/infra/models/index')
-
+//testes
 db.sequelize.authenticate().then(() => {
   console.log('Estas conectado a la BD')
 })
