@@ -18,9 +18,6 @@
   },
   "scripts": {
     "dev": "nodemon src/server.js",
-    "prepare": "cd .. && husky install front/.husky",
-    "prepack": "pinst --disable",
-    "postpack": "pinst --enable",
       "lint": "eslint . --fix --max-warnings=0",
         "format": "prettier . --write"
   },
