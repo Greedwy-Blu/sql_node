@@ -4,22 +4,22 @@
   "main": "index.js",
   "license": "MIT",
   "private": true,
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+  "scripts": {
+    "dev": "nodemon src/server.js",
+      "lint": "eslint . --fix --max-warnings=0",
+        "format": "prettier . --write"
   },
-  "lint-staged": {
+"lint-staged": {
     "*.js": [
       "npm run lint",
     "npm run format",
       "git add"
     ]
   },
-  "scripts": {
-    "dev": "nodemon src/server.js",
-      "lint": "eslint . --fix --max-warnings=0",
-        "format": "prettier . --write"
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "dependencies": {
     "apollo-server-express": "^3.11.1",
