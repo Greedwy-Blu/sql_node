@@ -1,63 +1,60 @@
 {
-  "name": "sql_node",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "private": true,
-  "scripts": {
-    "dev": "nodemon src/server.js",
-      "lint": "eslint . --fix --max-warnings=0",
-        "format": "prettier . --write"
-  },
-"lint-staged": {
-    "*.js": [
-      "npm run lint",
-    "npm run format",
-      "git add"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "dependencies": {
-    "apollo-server-express": "^3.11.1",
-    "bcrypt": "^5.1.0",
-    "body-parser": "^1.20.1",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
-    "eslint-config-prettier": "^8.5.0",
-    "express": "^4.18.2",
-    "express-graphql": "^0.12.0",
-    "fs": "^0.0.1-security",
-    "http": "^0.0.1-security",
-    "jsonwebtoken": "^8.5.1",
-    "morgan": "^1.10.0",
-    "mysql2": "^2.3.3",
-    "nodemon": "^2.0.20",
-    "path": "^0.12.7",
-    "pg": "^8.8.0",
-    "pg-hstore": "^2.3.4",
-    "prettier": "^2.8.1",
-    "process": "^0.11.10",
-    "sequelize": "^6.26.0"
-  },
-  "devDependencies": {
-    "@apollo/federation": "^0.38.1",
-    "@apollo/gateway": "^2.2.2",
-    "apollo-server": "^3.11.1",
-    "eslint": "^8.0.1",
-    "eslint-config-standard": "^17.0.0",
-    "eslint-plugin-import": "^2.25.2",
-    "eslint-plugin-n": "^15.0.0",
-    "eslint-plugin-promise": "^6.0.0",
-    "graphql": "^16.6.0",
-    "graphql-yoga": "^3.1.1",
-    "husky": "^8.0.2",
-    "lint-staged": "^13.1.0",
-    "pinst": "^3.0.0",
-    "sequelize-cli": "^6.5.2",
-    "sofa-api": "^0.15.1"
-  }
+	"name": "sql_node",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"dev": "nodemon src/server.js",
+  "lint": "eslint ./",
+		"lint:fix": "yarn lint --fix",
+		"format": "prettier . --write",
+		"prepare": "husky install",
+     "lint-staged": "lint-staged"
+	},
+	"lint-staged": {
+		"*.js": [
+			"yarn lint:fix"
+		]
+	},
+
+	"dependencies": {
+		"apollo-server-express": "^3.11.1",
+		"bcrypt": "^5.1.0",
+		"body-parser": "^1.20.1",
+		"cookie-parser": "^1.4.6",
+		"cors": "^2.8.5",
+		"eslint-config-prettier": "^8.5.0",
+		"express": "^4.18.2",
+		"express-graphql": "^0.12.0",
+		"fs": "^0.0.1-security",
+		"http": "^0.0.1-security",
+		"jsonwebtoken": "^8.5.1",
+		"morgan": "^1.10.0",
+		"mysql2": "^2.3.3",
+		"nodemon": "^2.0.20",
+		"path": "^0.12.7",
+		"pg": "^8.8.0",
+		"pg-hstore": "^2.3.4",
+		"prettier": "^2.8.1",
+		"process": "^0.11.10",
+		"sequelize": "^6.26.0"
+	},
+	"devDependencies": {
+		"@apollo/federation": "^0.38.1",
+		"@apollo/gateway": "^2.2.2",
+		"apollo-server": "^3.11.1",
+		"eslint": "^8.0.1",
+		"eslint-config-standard": "^17.0.0",
+		"eslint-plugin-import": "^2.25.2",
+		"eslint-plugin-n": "^15.0.0",
+		"eslint-plugin-promise": "^6.0.0",
+		"graphql": "^16.6.0",
+		"graphql-yoga": "^3.1.1",
+		"husky": "^8.0.2",
+		"lint-staged": "^13.1.0",
+		"pinst": "^3.0.0",
+		"sequelize-cli": "^6.5.2",
+		"sofa-api": "^0.15.1"
+	}
 }
