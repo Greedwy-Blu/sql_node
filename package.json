@@ -9,12 +9,14 @@
   "lint": "eslint ./",
 		"lint:fix": "yarn lint --fix",
 		"format": "prettier . --write",
+     "format:fix": "yarn format",
 		"prepare": "husky install",
      "lint-staged": "lint-staged"
 	},
 	"lint-staged": {
 		"*.js": [
-			"yarn lint:fix"
+			"yarn lint:fix",
+      "yarn format:fix"
 		]
 	},
 
