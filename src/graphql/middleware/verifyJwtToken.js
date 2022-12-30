@@ -1,5 +1,5 @@
-const secret = require('../../../../main/config/configSecret');
-const User = require('../../../../main/infra/models/User').User;
+const secret = require('../../main/config/configSecret');
+const User = require('../../main/infra/models/User').User;
 const jwt = require('jsonwebtoken');
 const { AuthenticationError } = require('apollo-server-express');
 
