@@ -9,12 +9,11 @@ module.exports = {
 	parserOptions: {
 		ecmaVersion: 'latest',
 	},
-  rules: {
-    "no-unused-expressions": "off",
-    "no-unused-vars": "off",
-     "camelcase": "off",
-    "no-use-before-define": "off",
-   "prefer-const" : "off"
-
-  },
+	rules: {
+		'no-unused-expressions': 'off',
+		'no-unused-vars': 'off',
+		camelcase: 'off',
+		'no-use-before-define': 'off',
+		'prefer-const': 'off',
+	},
 };
