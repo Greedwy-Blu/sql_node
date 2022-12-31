@@ -1,15 +1,17 @@
+const { User } = require('../main/infra/models');
+
 module.exports = {
 	Query: {
-		async getUsers(root, args, { models }) {
-			return await models.User.findAll();
+		async getUsers(root, args) {
+			return await User.findAll();
 		},
 		async getUser(root, args, ctx, { userId }, { models }) {
-			return await models.User.findByPk(userId);
+			return await User.findByPk(userId);
 		},
 	},
 	Mutation: {
-		async createUser(root, { nombre, apellido, active }, { models }) {
-			return await models.User.create({ nombre, apellido, active });
+		async createUser(root, { name, email, senha }, { models }) {
+			return await User.create({ name, email, senha });
 		},
 	},
 };
