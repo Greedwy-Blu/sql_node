@@ -15,13 +15,15 @@ const typeDefs = gql`
 	}
 
 	type Query {
-		user(id: Int!): User
-		posts(id: Int!): Posts
+		getUsers(id: Int!): User
+		getUser(id: Int!): User
+		getPosts(id: Int!): Posts
+		getPost(id: Int!): Posts
 	}
 
 	type Mutation {
 		createUser(name: String!, email: String!, senha: String): User!
-		createPosts(content: String!, title: String!): Posts
+		createPosts(content: String!, title: String!): Posts!
 	}
 `;
 
