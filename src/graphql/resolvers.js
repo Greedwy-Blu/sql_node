@@ -2,6 +2,7 @@ const { AuthenticationError } = require('apollo-server-express');
 const { User, Post } = require('../main/infra/models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const secret = require('../utils/configSecret');
 
 module.exports = {
 	Query: {
@@ -20,7 +21,12 @@ module.exports = {
 	},
 	Mutation: {
 		async createUser(root, args, context, { name, email, senha }) {
-			return await User.create({ name, email, senha });
+			const user = await User.create({ name, email, senha });
+
+			return {
+				token: jwt.sign({ userId: user.id }, secret, { expiresIn: '1m' }),
+				user,
+			};
 		},
 		async createPost(root, args, context, { content, title }, { user = null }) {
 			if (!user) {
@@ -30,11 +36,14 @@ module.exports = {
 		},
 		async login(root, { input }, context) {
 			const { email, password } = input;
+
 			const user = await User.findOne({ where: { email } });
+
 			if (user && bcrypt.compareSync(password, user.password)) {
-				const token = jwt.sign({ id: user.id }, 'mySecret');
+				const token = jwt.sign({ id: user.id }, secret);
 				return { ...user.toJSON(), token };
 			}
+
 			throw new AuthenticationError('Invalid credentials');
 		},
 	},
