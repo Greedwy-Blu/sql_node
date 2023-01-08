@@ -1,28 +1,23 @@
 const express = require('express');
 const cors = require('cors');
 const { ApolloServer } = require('apollo-server-express');
-const http = require('http');
+const { useSofa } = require('sofa-api');
 const routes = require('./main/router/routes');
-const db = require('./main/infra/models/index');
-
-db.sequelize.authenticate().then(() => {
-	console.log('Estas conectado a la BD');
-});
-db.sequelize.sync();
+const sequelize = require('./main/infra/models/index');
+const { getUserId } = require('./graphql/middleware/verifyJwtToken');
+const typeDefs = require('./graphql/schemas');
+const resolvers = require('./graphql/resolvers');
+const bodyParser = require('body-parser');
+const { makeExecutableSchema } = require('@graphql-tools/schema');
 
 const app = express();
 app.use(cors());
+app.use(bodyParser.json());
 
-const typeDefs = `
-    type Query{
-        totalPosts: Int!
-    }
-`;
-const resolvers = {
-	Query: {
-		totalPosts: () => 100,
-	},
-};
+const schema = makeExecutableSchema({
+	typeDefs,
+	resolvers,
+});
 
 let apolloServer = null;
 
@@ -30,19 +25,36 @@ async function startServer() {
 	apolloServer = new ApolloServer({
 		typeDefs,
 		resolvers,
-		context: { db },
+		context: ({ req }) => {
+			return {
+				...req,
+				sequelize,
+				userId: req && req.headers.authorization ? getUserId(req) : null,
+			};
+		},
 	});
 	await apolloServer.start();
 	apolloServer.applyMiddleware({ app });
 }
 
 startServer();
-const httpserver = http.createServer(app);
+
+app.use(
+	'/api',
+	useSofa({
+		basePath: '/api',
+		schema,
+		context: ({ req }) => {
+			return {
+				...req,
+				sequelize,
+				userId: req && req.headers.authorization ? getUserId(req) : null,
+			};
+		},
+	})
+);
 
 app.use(routes);
-app.get('/rest', function (req, res) {
-	res.json({ data: 'api working' });
-});
 
 app.listen(4000, function () {
 	console.log('server running on port 4000');

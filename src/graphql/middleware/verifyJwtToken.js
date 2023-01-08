@@ -1,21 +1,30 @@
-const secret = require('../../utils/configSecret');
-const User = require('../../main/infra/models/User').User;
+const { app_secret } = require('../../utils/configSecret');
 const jwt = require('jsonwebtoken');
-const { AuthenticationError } = require('apollo-server-express');
 
-const verifyToken = async (token) => {
-	try {
-		if (!token) return null;
-		const { id } = await jwt.verify(token, secret);
-		const user = await User.findByPk(id);
-		return user;
-	} catch (error) {
-		throw new AuthenticationError(error.message);
+function getTokenPayload(token) {
+	return jwt.verify(token, app_secret);
+}
+
+function getUserId(req, authToken) {
+	if (req) {
+		const authHeader = req.headers.authorization;
+		if (authHeader) {
+			const token = authHeader.replace('Bearer ', '');
+			if (!token) {
+				throw new Error('No token found');
+			}
+			const { userId } = getTokenPayload(token);
+			return userId;
+		}
+	} else if (authToken) {
+		const { userId } = getTokenPayload(authToken);
+		return userId;
 	}
-};
 
-module.exports = async ({ req }) => {
-	const token = (req.headers && req.headers.authorization) || '';
-	const user = await verifyToken(token);
-	return { user };
+	throw new Error('Not authenticated');
+}
+
+module.exports = {
+	app_secret,
+	getUserId,
 };
