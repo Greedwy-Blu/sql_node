@@ -8,7 +8,7 @@ module.exports = {
 			return await context.sequelize.Post.findByPk(args.id);
 		},
 		async getPosts(root, args, context) {
-			return await context.sequelize.Post.findByPk();
+			return await context.sequelize.Post.findAll();
 		},
 	},
 
@@ -17,7 +17,7 @@ module.exports = {
 			return await context.sequelize.Post.create({
 				content,
 				title,
-				userId: args.id,
+				user_id: args.id,
 			});
 		},
 	},

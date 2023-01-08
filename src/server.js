@@ -4,20 +4,26 @@ const { ApolloServer } = require('apollo-server-express');
 const { useSofa } = require('sofa-api');
 const routes = require('./main/router/routes');
 const sequelize = require('./main/infra/models/index');
-const { getUserId } = require('./graphql/middleware/verifyJwtToken');
+const { getUserId, getUser } = require('./graphql/middleware/verifyJwtToken');
 const typeDefs = require('./graphql/schemas');
 const resolvers = require('./graphql/resolvers');
 const bodyParser = require('body-parser');
 const { makeExecutableSchema } = require('@graphql-tools/schema');
 
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());
+let corsOptions = {
+	origin: '*',
+	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+	credentials: true,
+};
 
 const schema = makeExecutableSchema({
 	typeDefs,
 	resolvers,
 });
+
+const app = express();
+
+app.use(cors(corsOptions));
 
 let apolloServer = null;
 
@@ -26,18 +32,23 @@ async function startServer() {
 		typeDefs,
 		resolvers,
 		context: ({ req }) => {
+			const token = req.get('Authorization') || '';
+
 			return {
 				...req,
 				sequelize,
-				userId: req && req.headers.authorization ? getUserId(req) : null,
+				user_id: getUser(token.replace('Bearer', '')),
 			};
 		},
+		introspection: true,
+		playground: true,
 	});
 	await apolloServer.start();
 	apolloServer.applyMiddleware({ app });
 }
 
 startServer();
+app.use(bodyParser.json());
 
 app.use(
 	'/api',
@@ -48,7 +59,7 @@ app.use(
 			return {
 				...req,
 				sequelize,
-				userId: req && req.headers.authorization ? getUserId(req) : null,
+				user_id: req && req.headers.authorization ? getUserId(req) : null,
 			};
 		},
 	})

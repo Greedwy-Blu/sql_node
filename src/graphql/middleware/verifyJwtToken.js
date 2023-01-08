@@ -24,7 +24,19 @@ function getUserId(req, authToken) {
 	throw new Error('Not authenticated');
 }
 
+const getUser = (token) => {
+	try {
+		if (token) {
+			return jwt.verify(token, app_secret);
+		}
+		return null;
+	} catch (error) {
+		return null;
+	}
+};
+
 module.exports = {
 	app_secret,
 	getUserId,
+	getUser,
 };

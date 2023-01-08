@@ -16,7 +16,7 @@ module.exports = {
 		async signup(root, args, context) {
 			const senha = await bcrypt.hash(args.password, 10);
 			const user = await context.sequelize.User.create({ ...args, senha });
-			const token = jwt.sign({ userId: user.id }, app_secret);
+			const token = jwt.sign({ user_id: user.id }, app_secret);
 			return {
 				token,
 				user,
@@ -34,7 +34,7 @@ module.exports = {
 			if (!valid) {
 				throw new Error('Invalid password');
 			}
-			const token = jwt.sign({ userId: user.id }, app_secret);
+			const token = jwt.sign({ user_id: user.id }, app_secret);
 			return {
 				token,
 				user,
