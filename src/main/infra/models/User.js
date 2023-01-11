@@ -1,38 +1,29 @@
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize, Sequelize) => {
 	const User = sequelize.define(
 		'User',
 		{
 			id: {
-				type: DataTypes.INTEGER,
+				type: Sequelize.INTEGER,
 				autoIncrement: true,
 				primaryKey: true,
 			},
 			name: {
-				type: DataTypes.STRING,
+				type: Sequelize.STRING,
 				allowNull: false,
 			},
 			email: {
-				type: DataTypes.STRING,
+				type: Sequelize.STRING,
 				allowNull: false,
 			},
 			senha: {
-				type: DataTypes.STRING,
+				type: Sequelize.STRING,
 				allowNull: false,
 			},
 		},
 		{}
 	);
-
-	User.beforeCreate(async (user) => {
-		user.password = await user.generatePasswordHash();
-	});
-	User.prototype.generatePasswordHash = function () {
-		if (this.password) {
-			return bcrypt.hash(this.password, 10);
-		}
-	};
 
 	User.associate = function (models) {
 		// associations can be defined here

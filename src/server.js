@@ -1,10 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { ApolloServer } = require('apollo-server-express');
 const { useSofa } = require('sofa-api');
 const routes = require('./main/router/routes');
-const sequelize = require('./main/infra/models/index');
-const { getUserId, getUser } = require('./graphql/middleware/verifyJwtToken');
+const { db, sequelize, User, Posts } = require('./main/infra/models');
+const context = require('./graphql/middleware');
 const typeDefs = require('./graphql/schemas');
 const resolvers = require('./graphql/resolvers');
 const bodyParser = require('body-parser');
@@ -31,15 +32,7 @@ async function startServer() {
 	apolloServer = new ApolloServer({
 		typeDefs,
 		resolvers,
-		context: ({ req }) => {
-			const token = req.get('Authorization') || '';
-
-			return {
-				...req,
-				sequelize,
-				user_id: getUser(token.replace('Bearer', '')),
-			};
-		},
+		context,
 		introspection: true,
 		playground: true,
 	});
@@ -55,13 +48,7 @@ app.use(
 	useSofa({
 		basePath: '/api',
 		schema,
-		context: ({ req }) => {
-			return {
-				...req,
-				sequelize,
-				user_id: req && req.headers.authorization ? getUserId(req) : null,
-			};
-		},
+		context,
 	})
 );
 

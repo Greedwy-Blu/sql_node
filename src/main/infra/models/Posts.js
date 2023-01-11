@@ -1,20 +1,20 @@
 const { Model, DataTypes } = require('sequelize');
 
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize, Sequelize) => {
 	const Posts = sequelize.define(
 		'Posts',
 		{
 			id: {
-				type: DataTypes.INTEGER,
+				type: Sequelize.INTEGER,
 				autoIncrement: true,
 				primaryKey: true,
 			},
 			content: {
-				type: DataTypes.STRING,
+				type: Sequelize.STRING,
 				allowNull: false,
 			},
 			title: {
-				type: DataTypes.STRING,
+				type: Sequelize.STRING,
 				allowNull: false,
 			},
 		},

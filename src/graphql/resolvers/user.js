@@ -1,21 +1,32 @@
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const { app_secret } = require('../../utils/configSecret');
+const { User, db } = require('../../main/infra/models/');
+const { AuthenticationError } = require('apollo-server-express');
 
 module.exports = {
 	Query: {
-		async getUsers(root, args, context) {
-			return await context.sequelize.User.findAll();
+		getUsers: async (root, args, context) => {
+			const getusers = User.findAll();
+			return getusers;
 		},
-		async getUser(root, args, context) {
-			return await context.sequelize.User.findByPk(args.id);
+		async getUser(root, args, { user = null }) {
+			if (!user) {
+				throw new AuthenticationError('You must login to create a post');
+			}
+			return await User.findByPk({ id: user.id });
 		},
 	},
 
 	Mutation: {
 		async signup(root, args, context) {
-			const senha = await bcrypt.hash(args.password, 10);
-			const user = await context.sequelize.User.create({ ...args, senha });
+			const bcryptPassword = await bcrypt.hash(args.senha, 10);
+			const user = await User.create({
+				name: args.name,
+				email: args.email,
+				senha: bcryptPassword,
+			});
+			console.log(user);
 			const token = jwt.sign({ user_id: user.id }, app_secret);
 			return {
 				token,
@@ -24,7 +35,7 @@ module.exports = {
 		},
 
 		async login(root, args, context) {
-			const user = await context.sequelize.User.findOne({
+			const user = await User.findOne({
 				where: { email: args.email },
 			});
 			if (!user) {
@@ -39,14 +50,6 @@ module.exports = {
 				token,
 				user,
 			};
-		},
-
-		async createPost(root, args, context, { content, title }) {
-			return await context.sequelize.Post.create({
-				content,
-				title,
-				userId: args.id,
-			});
 		},
 	},
 };
